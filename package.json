@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node ./src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate": "node-pg-migrate"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,8 @@
     "@hapi/hapi": "^21.4.0",
     "dotenv": "^17.2.0",
     "joi": "^17.13.3",
+    "nanoid": "^5.1.5",
+    "node-pg-migrate": "^8.0.3",
     "pg": "^8.16.3"
   },
   "devDependencies": {
