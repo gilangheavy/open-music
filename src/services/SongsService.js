@@ -21,8 +21,28 @@ class SongsService {
     return result.rows[0].id;
   }
 
-  async getSong() {
-    const query = { text: "SELECT id,title,performer FROM songs" };
+  async getSong({ title, performer }) {
+    let query;
+
+    if (title && performer) {
+      query = {
+        text: "SELECT id, title, performer FROM songs WHERE title ~* $1 AND performer ~* $2",
+        values: [title, performer],
+      };
+    } else if (title) {
+      query = {
+        text: "SELECT id, title, performer FROM songs WHERE title ~* $1 ",
+        values: [title],
+      };
+    } else if (performer) {
+      query = {
+        text: "SELECT id, title, performer FROM songs WHERE performer ~* $1",
+        values: [performer],
+      };
+    } else {
+      query = { text: "SELECT id,title,performer FROM songs" };
+    }
+
     const result = await this._pool.query(query);
     return result.rows;
   }
