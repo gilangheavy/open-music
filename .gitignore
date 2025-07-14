@@ -1,0 +1,50 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+
+# Environment variables
+.env
+.env.*
+
+# Build output
+dist/
+build/
+coverage/
+.tmp/
+temp/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Hapi specific
+manifest.json
+config.json
+
+# Logs
+logs/
+*.log
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Misc
+*.swp
+*.bak
+*.pid
+
+node_modules/
+.DS_Store
+*.log
+/coverage
+/dist
+npm-debug.log
+yarn-error.log
+
+# Hapi.js specific
+/cache
+/uploads
+
