@@ -63,6 +63,15 @@ class AlbumsService {
       throw new NotFoundError("Album gagal dihapus. Id tidak ditemukan");
     }
   }
+
+  async getSongByAlbum(albumId) {
+    const query = {
+      text: "SELECT id, title, performer FROM songs WHERE album_id = $1",
+      values: [albumId],
+    };
+    const result = await this._pool.query(query);
+    return result.rows;
+  }
 }
 
 module.exports = AlbumsService;

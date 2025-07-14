@@ -22,9 +22,11 @@ class AlbumsHandler {
   async getAlbumByIdHandler(request, h) {
     const { id } = request.params;
     const albumData = await this._service.getAlbumById(id);
+    const songs = await this._service.getSongByAlbum(id);
     const album = {
       ...albumData,
       year: parseInt(albumData.year, 10),
+      songs: songs,
     };
 
     const response = h.response({
