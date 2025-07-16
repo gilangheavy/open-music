@@ -24,18 +24,22 @@ class PlaylistsHandler {
   }
 
   async getPlaylistsHandler(request, h) {
-    const { id: credentialId } = request.auth.credentials;
-    const playlists = await this._service.getPlaylists(credentialId);
+    try {
+      const { id: credentialId } = request.auth.credentials;
+      const playlists = await this._service.getPlaylists(credentialId);
 
-    const response = h.response({
-      status: "success",
-      message: "Berhasil mengambil data playlist",
-      data: {
-        playlists,
-      },
-    });
-    response.code(200);
-    return response;
+      const response = h.response({
+        status: "success",
+        message: "Berhasil mengambil data playlist",
+        data: {
+          playlists,
+        },
+      });
+      response.code(200);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async deletePlaylistByIdHandler(request, h) {
@@ -59,7 +63,7 @@ class PlaylistsHandler {
     const { songId } = request.payload;
     const { id: credentialId } = request.auth.credentials;
 
-    await this._service.verifyPlaylistOwner(id, credentialId);
+    await this._service.verifyPlaylistAccess(id, credentialId);
     await this._service.addSongToPlaylist(id, {
       songId,
     });
@@ -81,7 +85,7 @@ class PlaylistsHandler {
     const { id } = request.params;
     const { id: credentialId } = request.auth.credentials;
 
-    await this._service.verifyPlaylistOwner(id, credentialId);
+    await this._service.verifyPlaylistAccess(id, credentialId);
     const playlist = await this._service.getSongByPlaylistId(id);
     const response = h.response({
       status: "success",
@@ -100,7 +104,7 @@ class PlaylistsHandler {
     const { songId } = request.payload;
     const { id: credentialId } = request.auth.credentials;
 
-    await this._service.verifyPlaylistOwner(id, credentialId);
+    await this._service.verifyPlaylistAccess(id, credentialId);
     await this._service.deletePlaylistSongBySongId(id, { songId });
     await this._service.addLogActivity({
       playlistId: id,
