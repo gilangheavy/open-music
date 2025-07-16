@@ -34,14 +34,13 @@ exports.up = (pgm) => {
     },
   });
 
-  pgm.createTable("playlist_song_activities", {
+  pgm.createTable("playlistsong_activities", {
     id: {
       type: "VARCHAR(50)",
       primaryKey: true,
     },
     playlist_id: {
       type: "VARCHAR(50)",
-      unique: true,
       notNull: true,
     },
     song_id: {
@@ -57,7 +56,7 @@ exports.up = (pgm) => {
       notNull: true,
     },
     time: {
-      type: "int8",
+      type: "VARCHAR(100)",
       notNull: true,
     },
   });
@@ -87,8 +86,8 @@ exports.up = (pgm) => {
   );
 
   pgm.addConstraint(
-    "playlist_song_activities",
-    "fk_playlist_song_activities.playlist_id_playlist.id",
+    "playlistsong_activities",
+    "fk_playlistsong_activities.playlist_id_playlist.id",
     "FOREIGN KEY(playlist_id) REFERENCES playlists(id) ON DELETE CASCADE"
   );
 };
@@ -101,5 +100,5 @@ exports.up = (pgm) => {
 exports.down = (pgm) => {
   pgm.dropTable("playlists");
   pgm.dropTable("playlistsongs");
-  pgm.dropTable("playlist_song_activities");
+  pgm.dropTable("playlistsong_activities");
 };

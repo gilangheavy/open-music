@@ -47,6 +47,14 @@ const routes = (handler) => [
       auth: "token",
     },
   },
+  {
+    method: "GET",
+    path: "/playlists/{id}/activities",
+    handler: (request, h) => handler.getLogActivity(request, h),
+    options: {
+      auth: "token",
+    },
+  },
 ];
 
 module.exports = routes;
