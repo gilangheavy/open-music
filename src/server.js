@@ -1,18 +1,34 @@
 require("dotenv").config();
 const Hapi = require("@hapi/hapi");
-const albums = require("./api/albums");
-const songs = require("./api/songs");
+const Jwt = require("@hapi/jwt");
 
-const AlbumsService = require("./services/AlbumsService");
-const SongsService = require("./services/SongsService");
-
-const AlbumsValidator = require("./validator/albums");
-const SongsValidator = require("./validator/songs");
 const ClientError = require("./exceptions/ClientError");
+
+const albums = require("./api/albums");
+const AlbumsService = require("./services/AlbumsService");
+const AlbumsValidator = require("./validator/albums");
+
+const songs = require("./api/songs");
+const SongsService = require("./services/SongsService");
+const SongsValidator = require("./validator/songs");
+
+// users
+const users = require("./api/users");
+const UsersService = require("./services/UsersService");
+const UsersValidator = require("./validator/users");
+
+// authentications
+const authentications = require("./api/authentications");
+const AuthenticationsService = require("./services/AuthenticationsService");
+const TokenManager = require("./tokenize/TokenManager");
+const AuthenticationsValidator = require("./validator/authentications");
 
 const init = async () => {
   const albumsService = new AlbumsService();
   const songsService = new SongsService();
+  const usersService = new UsersService();
+  const authenticationsService = new AuthenticationsService();
+
   const server = Hapi.server({
     port: process.env.PORT,
     host: process.env.HOST,
@@ -24,6 +40,9 @@ const init = async () => {
   });
 
   await server.register([
+    {
+      plugin: Jwt,
+    },
     {
       plugin: albums,
       options: {
@@ -38,7 +57,39 @@ const init = async () => {
         validator: SongsValidator,
       },
     },
+    {
+      plugin: users,
+      options: {
+        service: usersService,
+        validator: UsersValidator,
+      },
+    },
+    {
+      plugin: authentications,
+      options: {
+        authenticationsService,
+        usersService,
+        tokenManager: TokenManager,
+        validator: AuthenticationsValidator,
+      },
+    },
   ]);
+
+  server.auth.strategy("token", "jwt", {
+    keys: process.env.ACCESS_TOKEN_KEY,
+    verify: {
+      aud: false,
+      iss: false,
+      sub: false,
+      maxAgeSec: process.env.ACCESS_TOKEN_AGE,
+    },
+    validate: (artifacts) => ({
+      isValid: true,
+      credentials: {
+        id: artifacts.decoded.payload.id,
+      },
+    }),
+  });
 
   server.ext("onPreResponse", (request, h) => {
     const { response } = request;

@@ -4,17 +4,9 @@
  * @returns {Promise<void> | void}
  */
 exports.up = (pgm) => {
-  pgm.createTable("albums", {
-    id: {
-      type: "VARCHAR(50)",
-      primaryKey: true,
-    },
-    name: {
-      type: "VARCHAR(200)",
-      notNull: true,
-    },
-    year: {
-      type: "INT8",
+  pgm.createTable("authentications", {
+    token: {
+      type: "TEXT",
       notNull: true,
     },
   });
@@ -26,5 +18,5 @@ exports.up = (pgm) => {
  * @returns {Promise<void> | void}
  */
 exports.down = (pgm) => {
-  pgm.dropTable("albums");
+  pgm.dropTable("authentications");
 };

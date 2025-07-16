@@ -1,9 +1,4 @@
 /**
- * @type {import('node-pg-migrate').ColumnDefinitions | undefined}
- */
-exports.shorthands = undefined;
-
-/**
  * @param pgm {import('node-pg-migrate').MigrationBuilder}
  * @param run {() => void | undefined}
  * @returns {Promise<void> | void}
@@ -39,6 +34,12 @@ exports.up = (pgm) => {
       notNull: false,
     },
   });
+
+  pgm.addConstraint(
+    "songs",
+    "fk_songs.song_album.id",
+    "FOREIGN KEY(album_id) REFERENCES albums(id) ON DELETE CASCADE"
+  );
 };
 
 /**
