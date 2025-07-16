@@ -18,6 +18,10 @@ exports.up = (pgm) => {
       notNull: true,
     },
   });
+
+  pgm.sql(
+    "INSERT INTO albums(id, name, year) VALUES ('album-default', 'Default Album', 2000)"
+  );
 };
 
 /**

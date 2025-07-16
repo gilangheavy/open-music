@@ -35,6 +35,8 @@ exports.up = (pgm) => {
     },
   });
 
+  pgm.sql("UPDATE songs SET album_id = 'album-default' WHERE album_id IS NULL");
+
   pgm.addConstraint(
     "songs",
     "fk_songs.album_id_album.id",
