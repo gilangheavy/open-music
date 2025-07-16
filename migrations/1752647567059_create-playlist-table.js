@@ -98,7 +98,7 @@ exports.up = (pgm) => {
  * @returns {Promise<void> | void}
  */
 exports.down = (pgm) => {
-  pgm.dropTable("playlists");
-  pgm.dropTable("playlistsongs");
   pgm.dropTable("playlistsong_activities");
+  pgm.dropTable("playlistsongs");
+  pgm.dropTable("playlists");
 };
