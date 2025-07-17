@@ -8,6 +8,7 @@ exports.up = (pgm) => {
     id: {
       type: "VARCHAR(50)",
       primaryKey: true,
+      notNull: true,
     },
     name: {
       type: "VARCHAR(200)",
@@ -16,6 +17,10 @@ exports.up = (pgm) => {
     year: {
       type: "INT8",
       notNull: true,
+    },
+    cover: {
+      type: "VARCHAR(200)",
+      notNull: false,
     },
   });
 

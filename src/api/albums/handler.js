@@ -1,3 +1,4 @@
+const config = require("../../utils/config");
 class AlbumsHandler {
   constructor(service, validator) {
     this._service = service;
@@ -26,6 +27,9 @@ class AlbumsHandler {
     const album = {
       ...albumData,
       year: parseInt(albumData.year, 10),
+      coverUrl: albumData.coverUrl
+        ? `http://${config.app.host}:${config.app.port}/albums/covers/${albumData.coverUrl}`
+        : albumData.coverUrl,
       songs: songs,
     };
 
@@ -62,6 +66,19 @@ class AlbumsHandler {
       data: {},
     });
     response.code(200);
+    return response;
+  }
+
+  async postUploadCoverHandler(request, h) {
+    const { id } = request.params;
+    const { cover } = request.payload;
+    this._validator.validateCoverHeaders(cover.hapi.headers);
+    await this._service.addAlbumCover(id, cover, cover.hapi);
+    const response = h.response({
+      status: "success",
+      message: "Sampul berhasil diunggah",
+    });
+    response.code(201);
     return response;
   }
 }

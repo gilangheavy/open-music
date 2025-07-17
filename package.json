@@ -25,6 +25,7 @@
   "homepage": "https://github.com/gilangheavy/open-music#readme",
   "dependencies": {
     "@hapi/hapi": "^21.4.0",
+    "@hapi/inert": "^7.1.0",
     "@hapi/jwt": "^3.2.0",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.0",
