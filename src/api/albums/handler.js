@@ -30,7 +30,7 @@ class AlbumsHandler {
       year: parseInt(albumData.album.year, 10),
       coverUrl: albumData.album.coverUrl
         ? `http://${config.app.host}:${config.app.port}/albums/covers/${albumData.album.coverUrl}`
-        : albumData.coverUrl,
+        : albumData.album.coverUrl,
       songs: songs.songs,
     };
 
