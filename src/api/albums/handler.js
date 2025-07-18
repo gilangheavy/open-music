@@ -1,7 +1,8 @@
 const config = require("../../utils/config");
 class AlbumsHandler {
-  constructor(service, validator) {
+  constructor(service, songsService, validator) {
     this._service = service;
+    this._songService = songsService;
     this._validator = validator;
   }
 
@@ -23,7 +24,7 @@ class AlbumsHandler {
   async getAlbumByIdHandler(request, h) {
     const { id } = request.params;
     const albumData = await this._service.getAlbumById(id);
-    const songs = await this._service.getSongByAlbum(id);
+    const songs = await this._songService.getSongByAlbum(id);
     const album = {
       ...albumData.album,
       year: parseInt(albumData.album.year, 10),
@@ -40,9 +41,7 @@ class AlbumsHandler {
         album,
       },
     });
-    if (albumData.isCache) {
-      response.header("X-Data-Source", "cache");
-    }
+    response.header("X-Data-Source", albumData.isCache ? "cache" : "origin");
     response.code(200);
     return response;
   }
@@ -118,9 +117,7 @@ class AlbumsHandler {
       message: "Berhasil mengambil album",
       data: { likes: parseInt(result.countLike, 10) },
     });
-    if (result.isCache) {
-      response.header("X-Data-Source", "cache");
-    }
+    response.header("X-Data-Source", result.isCache ? "cache" : "origin");
     response.code(200);
     return response;
   }

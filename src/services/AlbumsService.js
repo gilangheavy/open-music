@@ -74,15 +74,6 @@ class AlbumsService {
     await this._cacheService.delete(`album:${id}`);
   }
 
-  async getSongByAlbum(albumId) {
-    const query = {
-      text: "SELECT id, title, performer FROM songs WHERE album_id = $1",
-      values: [albumId],
-    };
-    const result = await this._pool.query(query);
-    return result.rows;
-  }
-
   async addAlbumCover(albumId, file, meta) {
     const query = {
       text: "SELECT * FROM albums WHERE id = $1",

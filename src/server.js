@@ -93,7 +93,7 @@ const init = async () => {
       plugin: albums,
       options: {
         service: albumsService,
-        storageService,
+        songsService,
         validator: AlbumsValidator,
       },
     },
