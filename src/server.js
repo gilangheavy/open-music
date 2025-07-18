@@ -10,6 +10,9 @@ const ClientError = require("./exceptions/ClientError");
 // cache
 const CacheService = require("./services/CacheService");
 
+// producer
+const ProducerService = require("./services/ProducerService");
+
 // albums
 const albums = require("./api/albums");
 const AlbumsService = require("./services/AlbumsService");
@@ -127,6 +130,7 @@ const init = async () => {
       plugin: playlists,
       options: {
         service: playlistsService,
+        ProducerService,
         validator: PlaylistsValidator,
       },
     },

@@ -55,6 +55,14 @@ const routes = (handler) => [
       auth: "token",
     },
   },
+  {
+    method: "POST",
+    path: "/export/playlists/{playlistId}",
+    handler: (request, h) => handler.postExportPlaylistHandler(request, h),
+    options: {
+      auth: "token",
+    },
+  },
 ];
 
 module.exports = routes;
