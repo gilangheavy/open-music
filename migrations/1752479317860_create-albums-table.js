@@ -24,8 +24,30 @@ exports.up = (pgm) => {
     },
   });
 
+  pgm.createTable("album_likes", {
+    id: {
+      type: "VARCHAR(50)",
+      primaryKey: true,
+      notNull: true,
+    },
+    user_id: {
+      type: "VARCHAR(200)",
+      notNull: true,
+    },
+    album_id: {
+      type: "VARCHAR(200)",
+      notNull: true,
+    },
+  });
+
   pgm.sql(
     "INSERT INTO albums(id, name, year) VALUES ('album-default', 'Default Album', 2000)"
+  );
+
+  pgm.addConstraint(
+    "album_likes",
+    "fk_album_likes.album_id_album.id",
+    "FOREIGN KEY(album_id) REFERENCES albums(id) ON DELETE CASCADE"
   );
 };
 

@@ -23,6 +23,12 @@ exports.up = (pgm) => {
       notNull: true,
     },
   });
+
+  pgm.addConstraint(
+    "album_likes",
+    "fk_user_likes.user_id_user.id",
+    "FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE"
+  );
 };
 
 /**
