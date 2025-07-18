@@ -31,7 +31,7 @@ class AlbumsHandler {
       coverUrl: albumData.album.coverUrl
         ? `http://${config.app.host}:${config.app.port}/albums/covers/${albumData.album.coverUrl}`
         : albumData.coverUrl,
-      songs: songs,
+      songs: songs.songs,
     };
 
     const response = h.response({
@@ -53,7 +53,6 @@ class AlbumsHandler {
     const response = h.response({
       status: "success",
       message: "Album berhasil diperbarui",
-      data: {},
     });
     response.code(200);
     return response;
@@ -65,7 +64,6 @@ class AlbumsHandler {
     const response = h.response({
       status: "success",
       message: "Album berhasil dihapus",
-      data: {},
     });
     response.code(200);
     return response;

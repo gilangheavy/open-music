@@ -52,7 +52,7 @@ class SongsService {
 
       const result = await this._pool.query(query);
       await this._cacheService.set(`songs`, JSON.stringify(result.rows));
-      return result.rows;
+      return { songs: result.rows, isCache: false };
     } else {
       const songsCacheData = JSON.parse(songsCache);
       return { songs: songsCacheData, isCache: true };
@@ -75,7 +75,10 @@ class SongsService {
         `song:${id}`,
         JSON.stringify(result.rows.map(mapSongToSongModel)[0])
       );
-      return result.rows.map(mapSongToSongModel)[0];
+      return {
+        song: result.rows.map(mapSongToSongModel)[0],
+        isCache: false,
+      };
     } else {
       const songCacheData = JSON.parse(songCache);
       return { song: songCacheData, isCache: true };
@@ -96,7 +99,7 @@ class SongsService {
         `songsAlbum:${albumId}`,
         JSON.stringify(result.rows)
       );
-      return result.rows;
+      return { songs: result.rows, isCache: false };
     } else {
       const songAlbumCacheData = JSON.parse(songAlbumCache);
       return { songs: songAlbumCacheData, isCache: true };

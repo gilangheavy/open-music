@@ -34,29 +34,27 @@ class SongsHandler {
   }
 
   async getSongHandler(request, h) {
-    try {
-      const songs = await this._service.getSong(request.query);
-      const response = h.response({
-        status: "success",
-        message: "Sukses mengambil data lagu",
-        data: {
-          songs,
-        },
-      });
-      response.code(200);
-      return response;
-    } catch (error) {
-      console.log(error);
-    }
+    const songData = await this._service.getSong(request.query);
+    const songs = songData.songs;
+    const response = h.response({
+      status: "success",
+      message: "Sukses mengambil data lagu",
+      data: {
+        songs,
+      },
+    });
+    response.header("X-Data-Source", songData.isCache ? "cache" : "origin");
+    response.code(200);
+    return response;
   }
 
   async getSongByIdHandler(request, h) {
     const { id } = request.params;
     const songData = await this._service.getSongById(id);
     const song = {
-      ...songData,
-      year: parseInt(songData.year, 10),
-      duration: parseInt(songData.duration, 10),
+      ...songData.song,
+      year: parseInt(songData.song.year, 10),
+      duration: parseInt(songData.song.duration, 10),
     };
     const response = h.response({
       status: "success",
@@ -65,6 +63,7 @@ class SongsHandler {
         song,
       },
     });
+    response.header("X-Data-Source", song.isCache ? "cache" : "origin");
     response.code(200);
     return response;
   }

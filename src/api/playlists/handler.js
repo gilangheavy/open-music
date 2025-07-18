@@ -24,22 +24,19 @@ class PlaylistsHandler {
   }
 
   async getPlaylistsHandler(request, h) {
-    try {
-      const { id: credentialId } = request.auth.credentials;
-      const playlists = await this._service.getPlaylists(credentialId);
-
-      const response = h.response({
-        status: "success",
-        message: "Berhasil mengambil data playlist",
-        data: {
-          playlists,
-        },
-      });
-      response.code(200);
-      return response;
-    } catch (error) {
-      console.error(error);
-    }
+    const { id: credentialId } = request.auth.credentials;
+    const playlistData = await this._service.getPlaylists(credentialId);
+    const playlists = playlistData.playlist;
+    const response = h.response({
+      status: "success",
+      message: "Berhasil mengambil data playlist",
+      data: {
+        playlists,
+      },
+    });
+    response.header("X-Data-Source", playlistData.isCache ? "cache" : "origin");
+    response.code(200);
+    return response;
   }
 
   async deletePlaylistByIdHandler(request, h) {
@@ -64,7 +61,7 @@ class PlaylistsHandler {
     const { id: credentialId } = request.auth.credentials;
 
     await this._service.verifyPlaylistAccess(id, credentialId);
-    await this._service.addSongToPlaylist(id, {
+    await this._service.addPlaylistSongToPlaylist(id, {
       songId,
     });
     await this._service.addLogActivity({
@@ -86,7 +83,8 @@ class PlaylistsHandler {
     const { id: credentialId } = request.auth.credentials;
 
     await this._service.verifyPlaylistAccess(id, credentialId);
-    const playlist = await this._service.getSongByPlaylistId(id);
+    const playlistData = await this._service.getPlaylistSongByPlaylistId(id);
+    const playlist = playlistData.playlistSong;
     const response = h.response({
       status: "success",
       message: "Berhasil mengambil data lagu playlist",
@@ -94,6 +92,7 @@ class PlaylistsHandler {
         playlist,
       },
     });
+    response.header("X-Data-Source", playlistData.isCache ? "cache" : "origin");
     response.code(200);
     return response;
   }
