@@ -34,8 +34,7 @@ class SongsHandler {
   }
 
   async getSongHandler(request, h) {
-    const songData = await this._service.getSong(request.query);
-    const songs = songData.songs;
+    const songs = await this._service.getSong(request.query);
     const response = h.response({
       status: "success",
       message: "Sukses mengambil data lagu",
@@ -43,7 +42,7 @@ class SongsHandler {
         songs,
       },
     });
-    response.header("X-Data-Source", songData.isCache ? "cache" : "origin");
+    response.header("X-Data-Source", "origin");
     response.code(200);
     return response;
   }
