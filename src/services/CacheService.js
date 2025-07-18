@@ -24,7 +24,6 @@ class CacheService {
 
   async get(key) {
     const result = await this._client.get(key);
-    console.log(result);
     return result;
   }
 
