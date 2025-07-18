@@ -47,7 +47,7 @@ const init = async () => {
   const cacheService = new CacheService();
   const storageService = new StorageService(path.resolve("uploads/images"));
   const albumsService = new AlbumsService(storageService, cacheService);
-  const songsService = new SongsService();
+  const songsService = new SongsService(cacheService);
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationsService();
   const collaborationsService = new CollaborationsService();
