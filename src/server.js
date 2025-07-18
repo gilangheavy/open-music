@@ -7,6 +7,9 @@ const config = require("./utils/config");
 
 const ClientError = require("./exceptions/ClientError");
 
+// cache
+const CacheService = require("./services/CacheService");
+
 // albums
 const albums = require("./api/albums");
 const AlbumsService = require("./services/AlbumsService");
@@ -41,8 +44,9 @@ const CollaborationsValidator = require("./validator/collaborations");
 const StorageService = require("./services/StorageService");
 
 const init = async () => {
+  const cacheService = new CacheService();
   const storageService = new StorageService(path.resolve("uploads/images"));
-  const albumsService = new AlbumsService(storageService);
+  const albumsService = new AlbumsService(storageService, cacheService);
   const songsService = new SongsService();
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationsService();

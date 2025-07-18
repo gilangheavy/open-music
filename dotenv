@@ -1,8 +1,10 @@
 # server configuration
+
 HOST=
 PORT=
- 
+
 # node-postgres configuration
+
 PGUSER=
 PGHOST=
 PGPASSWORD=
@@ -10,6 +12,11 @@ PGDATABASE=
 PGPORT=
 
 # token configuration
+
 ACCESS_TOKEN_KEY=
 REFRESH_TOKEN_KEY=
 ACCESS_TOKEN_AGE=
+
+# Redis
+
+REDIS_SERVER=

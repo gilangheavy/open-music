@@ -25,10 +25,10 @@ class AlbumsHandler {
     const albumData = await this._service.getAlbumById(id);
     const songs = await this._service.getSongByAlbum(id);
     const album = {
-      ...albumData,
-      year: parseInt(albumData.year, 10),
-      coverUrl: albumData.coverUrl
-        ? `http://${config.app.host}:${config.app.port}/albums/covers/${albumData.coverUrl}`
+      ...albumData.album,
+      year: parseInt(albumData.album.year, 10),
+      coverUrl: albumData.album.coverUrl
+        ? `http://${config.app.host}:${config.app.port}/albums/covers/${albumData.album.coverUrl}`
         : albumData.coverUrl,
       songs: songs,
     };
@@ -40,6 +40,9 @@ class AlbumsHandler {
         album,
       },
     });
+    if (albumData.isCache) {
+      response.header("X-Data-Source", "cache");
+    }
     response.code(200);
     return response;
   }
@@ -109,13 +112,15 @@ class AlbumsHandler {
 
   async getAlbumLikesHandler(request, h) {
     const { id } = request.params;
-    const countLike = await this._service.getAlbumLike(id);
-
+    const result = await this._service.getAlbumLike(id);
     const response = h.response({
       status: "success",
       message: "Berhasil mengambil album",
-      data: { likes: parseInt(countLike, 10) },
+      data: { likes: parseInt(result.countLike, 10) },
     });
+    if (result.isCache) {
+      response.header("X-Data-Source", "cache");
+    }
     response.code(200);
     return response;
   }
